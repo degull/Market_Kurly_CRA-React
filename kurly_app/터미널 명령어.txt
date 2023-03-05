@@ -1,0 +1,8 @@
+현재위치
+ls -la
+
+노드모듈 설치 => 작업할 때 반드시 설치
+npm install
+
+서버 키기
+npm start

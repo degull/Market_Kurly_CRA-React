@@ -1,0 +1,24 @@
+#wrap {
+   width:100%;
+   #goTop {
+      position: fixed;
+      width: 60px;
+      height: 60px;
+      right: 30px;
+      bottom: -60px;
+      z-index: 4;
+      opacity: 0;
+      transition: all 1s;
+      &.on {
+         bottom: 20px;
+         opacity: 1;
+      }
+      a {
+         width: 100%;
+         display: block;
+         img {
+            width: 100%;
+         }
+      }
+   }
+}

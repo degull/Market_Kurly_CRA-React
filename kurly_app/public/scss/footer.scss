@@ -1,0 +1,190 @@
+#wrap {
+   width:100%;
+   #footer {
+      position: relative;
+      z-index: 1;
+      width:100%;
+      border-top:1px solid #ccc;
+
+      .row {
+         width: 100%;
+         &.row1{
+            width: 100%;
+            background: #fff;
+            .container {
+               width: 100%;
+               .row1-1 {
+                  padding: 30px 0;
+                  width: 100%;
+                  display: flex;
+                  .left {
+                     width: 50%;
+                     > ul {
+                       > li {
+                           &:nth-child(1) {
+                              h1 {
+                                 color: #333;
+                                 font-size: 20px;
+                                 font-weight: 600;
+                                 padding: 0 0 20px 0;
+                                 padding-bottom: 17px;
+                                 line-height: 29px;
+                              }
+                           }
+                           &:nth-child(2) {
+                              h2 {
+                                 color: #333;
+                                 font-size: 28px;
+                                 font-weight: 700;
+                                 a {
+                                    color: #333;
+                                    font-size: 25px;
+                                    font-weight: 600;
+                                 }
+                                 span {
+                                    margin: 0 0 0 15px;
+                                    font-size: 15px;
+                                    font-weight: 500;
+                                    color: #333;
+                                 }
+                              }
+                              
+                           }
+                           &:nth-child(3) {
+                              padding: 20px 0 10px 0;
+                              ul {
+                                 li {
+                                    display: flex;
+                                    font-size: 14px;
+                                    padding: 11px 8px 0 0 ;
+                                    a {
+                                       border-radius: 3px;
+                                       display: block;
+                                       color: #333;
+                                       width: 140px;
+                                       height: 40px;
+                                       margin: 2px 16px 0 0;
+                                       border: 1px solid rgb(226,226,226);
+                                       display: flex;
+                                       justify-content: center;
+                                       align-items: center;
+                                    }
+                                    div {
+                                       line-height: 100%;
+                                       letter-spacing: -0.5px;
+                                       p {
+                                          color: rgb(153,153,153);
+                                          margin-left: 8px;
+                                          margin-top: 2px;
+                                       }
+                                    }
+                                 }
+                              }
+                           }
+                           &:nth-child(4) {
+                              color: rgb(153,153,153);
+                              font-size: 12px;
+                              line-height: 110%;
+                              a {
+                                 color: rgb(153,153,153);
+                              }
+                           }
+                       }         
+                     }
+                  }
+                  .right {
+                     width: 50%;
+                     ul {
+                        width: 100%;
+                        li {
+                           width: 100%;
+                           &:nth-child(1){
+                              a {
+                                 font-size: 14px;
+                                 font-weight: 600;
+                                 color: #000;
+                                 margin: 0 10px 0 0;
+                              }
+                           }
+                           &:nth-child(2){
+                              font-size: 12px;
+                              padding: 30px 0 40px 0;
+                              color: #999;
+                              line-height: 150%;
+                              i {
+                                 color:rgb(153,153,153);
+                                 margin: 0 7px;
+                              }
+                              a {
+                                 color: #5f0080;
+                                 font-weight: 500;
+                              }
+     
+                           }
+                           &:nth-child(3){
+                              display: flex;
+                              a {
+                                 width: 30px;
+                                 height: 30px;
+                                 margin: 0 10px 0 0;
+                                 img {
+                                    width: 100%;                                 
+                                 }
+                              }
+                           }
+                        }
+                     }
+                  }
+               }
+               .row1-2 {
+                  padding: 30px 0;
+                  width: 100%;
+                  border-top: 1px solid #999;
+                  display: flex;
+                  justify-content: space-between;
+                  a {
+                     display: flex;
+                     width: 100%;
+                     text-align: center;
+                     img {
+                        height: 32px;
+                     }
+                     span {
+                        margin: 0 0 0 10px;
+                        text-align: center;
+                        font-size: 10px;
+                        line-height: 140%;
+                        color: rgb(153,153,153);                       
+                     }
+                  }
+               }
+            }
+         }
+         &.row2{
+            width: 100%;
+            padding: 25px 0 40px 0;
+            background: #f7f7f7;
+            .container {
+               width: 100%;
+               text-align: center;
+               font-size: 10px;
+               font-weight: 600;
+               color: rgb(153,153,153);
+               div {
+                  line-height: 140%;
+               }
+               p {
+                  padding: 14px 0 0 0;
+               }
+            }
+         }
+         .container {
+            width: 100%;
+            max-width: 1068px;
+            margin: 0 auto;
+            height: 100%;
+         }
+      }
+      
+   }
+}
