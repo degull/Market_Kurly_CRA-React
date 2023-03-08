@@ -44,7 +44,7 @@
          // 4) 공백사용안됨
          $('#userId').on({
             keyup(){    //입력칸에 입력이 되면
-               const regExp1 = /[`~!@#$%^&*()_\-+=|\\\[\]\\\{}"';:\/?\.\,>,<]/g;   //특수문자
+               const regExp1 = /[`~!@#$%^&*()_\-+=|\\[]{}'";:\/?.>,<]/g; //특수문자
                const regExp2 = /[가-하ㄱ-ㅎㅏ-ㅣ]/g;    //한글
                const regExp3 = /[A-Za-z]+[0-9]/g;  //영문과 숫자의 조합 (영문은 반드시 존재해야하지만 숫자는 존재해도되고 안해도됨(*표시 사용))
                const regExp4 = /.{6,16}/g;       //모든 글자는 .으로 대체 && 6~16자 이하   
@@ -87,7 +87,7 @@
                  // const regExp = /([A-Za-z]+[0-9]+)+/g;  // 영문 또는 영문숫자
                  // const regExp = /([A-Za-z]+[`~!@#$%^&*()_\-+=|\\\[\]{}'";:\/?\.>,<]+)+/g;  // 영문 또는 영문숫자
                  // const regExp = /([0-9]+[`~!@#$%^&*()_\-+=|\\\[\]{}'";:\/?\.>,<]+)+/g;  // 영문 또는 영문숫자
-                 const regExp1 = /([0-9]+[`~!@#$%^&*()_\-+=|\\\[\]{}'";:\/?\.>,<]+)+|([A-Za-z]+[0-9]+)+|([A-Za-z]+[`~!@#$%^&*()_\-+=|\\\[\]{}'";:\/?\.>,<]+)+/g;  // 영문 또는 영문숫자
+                 const regExp1 = /[`~!@#$%^&*()_\-+=|\\[]{}'";:\/?.>,<]/g; //특수문자
                  const regExp2 = /.{10,}/g;           // 10자이상~ 
                  const regExp3 = /[가-힣ㄱ-ㅎㅏ-ㅣ]/g; // 한글
                  const regExp4 = /\s/g;               // 공백 
@@ -133,7 +133,7 @@
          $('#userName').on({
             keyup(){
             
-               const regExp1 = /[`~!@#$%^&*()_\-+=|\\\[\]\\\{}"';:\/?\.\,>,<]/g;   //특수문자
+               const regExp1 = /[`~!@#$%^&*()_\-+=|\\[]{}'";:\/?.>,<]/g; //특수문자
                const regExp2 = /[A-Za-z0-9가-힣ㄱ-ㅎㅏ-ㅣ\s]{1,20}/g;  // 영문숫자한글공백
             
             
@@ -173,7 +173,7 @@
          $('#userEmail').on({
             keyup(){
 
-               const regExp1 = /^[A-Za-z0-9`~!#$%^&*_\-+=|{}'\/?]+[\.]?[A-Za-z0-9`~!#$%^&*_\-+=|{}'\/?]*@[A-Za-z0-9~\-_\.]+\.[A-Za-z]{2,3}$/g;  // 이메일
+               const regExp1 = /^[A-Za-z0-9`~!#$%^&*_\-+=|{}'/?]+[.]?[A-Za-z0-9`~!#$%^&*_\-+=|{}'/?]*@[A-Za-z0-9~\-_.]+\.[A-Za-z]{2,3}$/g;  // 이메일
                const regExp2 = /\s/g;  //공백
 
                if($(this).val()!=='') {   //이메일이 공백이 아니라면
@@ -313,12 +313,17 @@
                //console.log( Number($('#userHpNumBox').val()) );
                //console.log(that.member.휴대폰인증번호);
 
-               if (Number($('#userHpNumBox').val()) === that.member.휴대폰인증번호) {
+               if ( Number($('#userHpNumBox').val()) === that.member.휴대폰인증번호) {
                   $('#formEventModal').fadeIn(300);
                   $('#formEventModal .msg').html('인증에 성공하였습니다.' );
 
                   $('.hp-num-btn2').addClass('on');   //다른 번호 인증 버튼 보이기
                   $('.hp-num-btn').addClass('off');   //인증번호 받기 버튼 숨기기
+
+                  $('.hp2').removeClass('on');
+                  clearInterval(that.member.setId);
+                  that.member.초=59;
+                  that.member.분=2;
                }
                else {
                   $('#formEventModal').fadeIn(300);

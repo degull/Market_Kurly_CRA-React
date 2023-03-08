@@ -1,19 +1,24 @@
 import React from 'react';
 
-export default function SignUpComponent( props ){
+export default function SignUpComponent( {회원가입, seconds, minutes, setId, setCountPlay} ){
 
-   console.log( props );
+   React.useEffect(()=>{
+      console.log('상위컴포넌트 seconds : ',seconds);
+      console.log('상위컴포넌트 minutes : ',minutes);
+      console.log('상위컴포넌트 setId : ',setId);
+   });
+
 
 
    // 상태관리(변수, 세터변수)
-   const [state, setState] = React.useState( props );
+   const [state, setState] = React.useState( 회원가입 );
 
    console.log (state);
 
    // [1] 아이디 입력상자
    const onChangeUserId=(e)=>{
       e.preventDefault();
-      const regExp1 = /[`~!@#$%^&*()_\-+=|\\\[\]\\\{}"';:\/?\.\,>,<]/g;   //특수문자
+      const regExp1 = /[`~!@#$%^&*()_\-+=|\\[]{}'";:\/?.>,<]/g; //특수문자
       const regExp2 = /[가-하ㄱ-ㅎㅏ-ㅣ]/g;    //한글
       const regExp3 = /[A-Za-z]+[0-9]/g;  //영문과 숫자의 조합 (영문은 반드시 존재해야하지만 숫자는 존재해도되고 안해도됨(*표시 사용))
       const regExp4 = /.{6,16}/g;       //모든 글자는 .으로 대체 && 6~16자 이하   
@@ -61,7 +66,7 @@ export default function SignUpComponent( props ){
    // [1]-1 아이디 중복확인
    const onClickIdOkBtn=(e)=>{
       e.preventDefault(e);
-      const regExp1 = /[`~!@#$%^&*()_\-+=|\\\[\]\\\{}"';:\/?\.\,>,<]/g;   //특수문자
+      const regExp1 = /[`~!@#$%^&*()_\-+=|\\[]{}'";:\/?.>,<]/g; //특수문자
       const regExp2 = /[가-하ㄱ-ㅎㅏ-ㅣ]/g;    //한글
       const regExp3 = /[A-Za-z]+[0-9]/g;  //영문과 숫자의 조합 (영문은 반드시 존재해야하지만 숫자는 존재해도되고 안해도됨(*표시 사용))
       const regExp4 = /.{6,16}/g;       //모든 글자는 .으로 대체 && 6~16자 이하   
@@ -105,7 +110,7 @@ export default function SignUpComponent( props ){
    const onChangeUserPw=(e)=>{
 
       const regExp1 = /.{10,}/g;           // 10자이상~ 
-      const regExp2 = /([0-9]+[`~!@#$%^&*()_\-+=|\\\[\]{}'";:\/?\.>,<]+)+|([A-Za-z]+[0-9]+)+|([A-Za-z]+[`~!@#$%^&*()_\-+=|\\\[\]{}'";:\/?\.>,<]+)+/g;  // 영문 또는 영문숫자
+      const regExp2 = /[`~!@#$%^&*()_\-+=|\\[]{}'";:\/?.>,<]/g; //특수문자
       const regExp3 = /[가-힣ㄱ-ㅎㅏ-ㅣ]/g; // 한글
       const regExp4 = /\s/g;               // 공백 
       const regExp5 = /(.)\1\1/g;          // 동일한 연속된 글자 3자 
@@ -181,7 +186,7 @@ export default function SignUpComponent( props ){
       let isNameMsg= '';
       let 이름 = '';
 
-      const regExp1 = /[`~!@#$%^&*()_\-+=|\\\[\]{}'";:\/?\.>,<]/g;  // 영문
+      const regExp1 = /[`~!@#$%^&*()_\-+=|\\[]{}'";:\/?.>,<]/g; //특수문자
       const regExp2 = /[A-Za-z0-9가-힣ㄱ-ㅎㅏ-ㅣ\s]{1,20}/g;  // 영문
     
       이름 = value.replace(regExp1,''); // 특수문자 삭제
@@ -210,7 +215,7 @@ export default function SignUpComponent( props ){
       let isEmail = false;
       let isEmailMsg = '';
 
-      const regExp1 = /^[A-Za-z0-9`~!#$%^&*_\-+=|{}'\/?]+[\.]?[A-Za-z0-9`~!#$%^&*_\-+=|{}'\/?]*@[A-Za-z0-9~\-_\.]+\.[A-Za-z]{2,3}$/g;  // 이메일
+      const regExp1 = /^[A-Za-z0-9`~!#$%^&*_\-+=|{}'/?]+[.]?[A-Za-z0-9`~!#$%^&*_\-+=|{}'/?]*@[A-Za-z0-9~\-_.]+\.[A-Za-z]{2,3}$/g;  // 이메일
       const regExp2 = /\s/g;  
 
       if(value!=='') {   
@@ -237,6 +242,138 @@ export default function SignUpComponent( props ){
    }
 
       // [4]-1 이메일 중복
+
+
+
+      // [5]-1 휴대폰 입력상자
+      // onChange 이벤트 (button의 경우 clickEvent)
+      const onChangeUserHp=(e)=>{
+
+         const {value} = e.target;
+         let 휴대폰 = '';
+         let isHpDisabled = true;
+         let isHp = false;
+         let isHpMsg = '';
+         
+         const regExp = /[^0-9]/g;
+
+         // 숫자가 아니면 삭제
+         휴대폰 = value.replace(regExp, '');
+         
+
+         console.log(regExp.test(value));
+
+
+
+         if ( value.length >= 1 ){
+            isHpDisabled = false;
+            isHp = false;
+            isHpMsg = ''
+         }
+
+         else {
+            isHpDisabled = true;
+            isHp = true;
+            isHpMsg = '휴대폰 번호를 입력해주세요.'
+         }
+
+         setState({
+            ...state,
+            휴대폰:휴대폰,
+            isHpDisabled : isHpDisabled,
+            isHp : isHp,
+            isHpMsg:isHpMsg
+         })
+
+      }
+
+
+      // [5]-2 휴대폰 인증번호 발송
+      // JSX에서 휴대폰 버튼 클릭 이벤트 등록
+      // 함수등록
+      // 버튼의 이벤트 제거
+      // 변수등록 : 인증번호
+      // 정규표현식 등록 (전화번호)
+      // 인증번호 랜덤 전송
+
+      const onClickHpNumberBtn=(e)=>{
+         e.preventDefault();
+
+         const regExp = /^01[0-9]{1}[0-9]{3,4}[0-9]{4}$/g;
+         let 휴대폰인증번호 = null;
+         let isHp2 = false;
+
+         
+         if ( regExp.test(state.휴대폰) === false) {
+            alert('잘못된 휴대폰 번호 입니다. 확인 후 다시 시도해주세요');
+            isHp2 = false;
+         }
+          
+         else {
+            isHp2 = true;
+                  
+            const randomNum = Math.floor(Math.random() * 900000+100000);
+
+            alert (`인증번호가 발송되었습니다. ${randomNum}` );
+            휴대폰인증번호 = randomNum;
+            setCountPlay();
+         }
+
+         setState({
+            ...state,
+            isHp2:isHp2,
+            휴대폰인증번호:휴대폰인증번호,
+            
+         })
+
+      }
+
+
+      // [5]-3 인증번호 비교 입력상지
+      const onChangeHp2=(e)=>{
+         const {value} = e.target;
+         let isDisabled2 = true;
+
+         if ( value.length >= 1) {
+            isDisabled2 = false;
+         }
+         else {
+            isDisabled2 = true;
+         }
+
+         setState({
+            ...state,
+            인증번호입력값 : value,
+            isDisabled2 : isDisabled2
+         })
+      }
+
+
+
+      // [5]-4 인증번호 확인 버튼 클릭 이벤트
+      const onClickHp2=(e)=>{
+         e.preventDefault();
+
+
+         if ( Number(state.휴대폰인증번호) === Number(state.인증번호입력값)) {
+            alert('인증에 성공하였습니다.' );
+   
+
+            clearInterval(setId);
+
+            setState({
+               isHp:false,
+               isHp2:false
+            });
+
+         }
+         else {
+            alert('잘못된 인증코드 입니다.' );
+         }
+   
+   
+      }
+
 
    
 
@@ -427,20 +564,38 @@ export default function SignUpComponent( props ){
                      <li className="hp hp1">
                         <div>
                            <em>휴대폰<i>*</i></em>
-                           <input type="text" name="user_phone" id="userPhone" placeholder="숫자만 입력해주세요"/>
+                           <input 
+                           type="text" 
+                           name="user_phone" 
+                           id="userPhone" 
+                           placeholder="숫자만 입력해주세요"
+                           onChange={onChangeUserHp}
+                           value={state.휴대폰}
+                           />
                            {/* <!-- disabled=false => 제이쿼리 구현 --> */}
-                           <button className="hp-num-btn" disabled>인증번호 받기</button>
+                           <button 
+                           className={`hp-num-btn ${state.isHpDisabled===false? ' on' : ''}`} 
+                           disabled={state.isHpDisabled}
+                           onClick={onClickHpNumberBtn}
+                           >인증번호 받기</button>
                            <button className="hp-num-btn2">다른번호 인증</button>
                         </div>
-                        <p className="isError"></p>
+                        <p className={`isError${state.isHp===true ? ' on' : ''}`}>{state.isHpMsg}</p>
                      </li>   
 
-                     <li className="hp hp2 on">
+                     <li className={`hp hp2 ${state.isHp2 === true ? ' on' : ''}`}>
                         <div>
-                           <input type="text" name="userhp_num_box" id="userHpNumBox" placeholder="인증번호를 입력해주세요"/>
+                           <input 
+                           type="text" 
+                           name="userhp_num_box"
+                           id="userHpNumBox" 
+                           placeholder="인증번호를 입력해주세요"
+                           onChange={onChangeHp2}
+                           value={state.인증번호입력값}
+                           />
                            {/* <!-- disabled=false => 제이쿼리 구현 --> */}
-                           <span className="hp-count"><i className="count-minutes">02</i>:<i className="count-seconds">59</i></span>
-                           <button className="hp-ok-btn" disabled>인증번호 확인</button>
+                           <span className="hp-count"><i className="count-minutes">{minutes}</i>:<i className="count-seconds">{seconds}</i></span>
+                           <button onClick={onClickHp2} className={`hp-ok-btn${state.isDisabled2===false?' on':''}`} disabled={state.isDisabled2}>인증번호 확인</button>
                         </div>
                      </li> 
 
@@ -643,7 +798,15 @@ SignUpComponent.defaultProps = {
       isEmail:false,
       isEmailMsg:'',
       
-      휴대폰:'',           
+      휴대폰:'',     
+      isHpDisabled : true,
+      isHp : false,
+      isHpMsg : '',
+      isHp2 : false,
+
+      인증번호입력값:'',
+      isDisabled2:true,
+
       휴대폰인증번호:0,  
       분:2,
       초:59,
