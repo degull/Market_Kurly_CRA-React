@@ -1,19 +1,123 @@
 import React from 'react';
 
-export default function SignUpComponent(){
+export default function SignUpComponent( props ){
+
+   console.log( props );
 
 
    // 상태관리(변수, 세터변수)
-   const [state, setState] = React.useState({
-      주소1:'',
-      주소2:''
-   });
+   const [state, setState] = React.useState( props );
+
+   console.log (state);
+
+   // [1] 아이디 입력상자
+   const onChangeUserId=(e)=>{
+      e.preventDefault();
+      const regExp1 = /[`~!@#$%^&*()_\-+=|\\\[\]\\\{}"';:\/?\.\,>,<]/g;   //특수문자
+      const regExp2 = /[가-하ㄱ-ㅎㅏ-ㅣ]/g;    //한글
+      const regExp3 = /[A-Za-z]+[0-9]/g;  //영문과 숫자의 조합 (영문은 반드시 존재해야하지만 숫자는 존재해도되고 안해도됨(*표시 사용))
+      const regExp4 = /.{6,16}/g;       //모든 글자는 .으로 대체 && 6~16자 이하   
+      const regExp5 = /(.)\1\1\1/g;       //동일한 연속된 문자 3글자 이상은 불가   /* 연속글자를 찾는 방법 */
+      const regExp6 = /\s/g;     //공백허용안함
+
+      //let value = e.target.value;
+      let {value} = e.target; // 키보드 입력상자 입력값 비구조화
+      let 아이디= '';
+      let isId = false;
+      let isIdMsg = '';
+      
+
+
+
+      // 1. 정규표현식 특수문자가 아니면 삭제(공백으로 치환)
+      //    문자열.replace(정규식,'');
+      //e.target.value = ( e.target.value.replace(regExp1, ''));  //특수문자가 입력되면 특수문자 입력되지 않고 공백으로   
+      아이디 = value.replace(regExp1, '');
+
+
+      // 2. 한글입력사용안됨
+      //모두 오류라면
+      //한글이라면 또는 영문과 숫자 조합이 아니라면 오류 && 6~16가 아니라면 오류 && 연속된 글자가 3자 이상이면 오류
+      if( regExp2.test(value) === true || regExp3.test(value) === false || regExp4.test($(this).val()) === false || regExp5.test(value) === true || regExp6.test(value) === true ){   
+         isIdMsg = "6자 이상 16자 이하의 영문 혹은 영문과 숫자를 조합, 한글허용안함, 공백허용안함, 동일한 문자 연속 3자 이상 허용 안함";
+         isId = false;
+      }
+
+      else {                                     
+         isIdMsg = '';
+         isId = true;
+      }
+
+      // 상태관리와 연결
+      setState ({
+         ...state,
+         아이디:아이디,
+         isId : isId,
+         isIdMsg : isIdMsg
+      })
+   }
+
+
+   // [1]-1 아이디 중복확인
+
+
+   // [2] 비밀번호 입력상자
+   const onChangeUserPw=(e)=>{
+
+      const regExp1 = /.{10,}/g;           // 10자이상~ 
+      const regExp2 = /([0-9]+[`~!@#$%^&*()_\-+=|\\\[\]{}'";:\/?\.>,<]+)+|([A-Za-z]+[0-9]+)+|([A-Za-z]+[`~!@#$%^&*()_\-+=|\\\[\]{}'";:\/?\.>,<]+)+/g;  // 영문 또는 영문숫자
+      const regExp3 = /[가-힣ㄱ-ㅎㅏ-ㅣ]/g; // 한글
+      const regExp4 = /\s/g;               // 공백 
+      const regExp5 = /(.)\1\1/g;          // 동일한 연속된 글자 3자 
+
+      let 비밀번호 = '';
+      let {value} = e.target;
+      let isPw = false;    //초기값 false
+      let isPwMsg = '';
+
+      // 10글자 이상
+      if ( regExp1.test(value) === false ){
+         isPwMsg = '10글자 이상 입력';
+         isPw = false;
+      }
+
+      // 영문+숫자, 영문+특수문자, 특수문자와 숫자 2가지 이상 포함 (공백제외)
+      else if ( regExp2.test(value) === false || regExp4.test(value) === true || regExp3.test(value) === true){
+         isPwMsg = '영문/숫자/특수문자만 허용하며, 2개 이상 조합, 공백제외, 한글제외';
+         isPw = false;
+      }
+      
+      // 동일 연속글자 3개
+      else if (regExp5.test(value) === true){
+         isPwMsg = '동일글자3개';
+         isPw = false;
+      }
+      
+      else {
+         console.log('오류없음');
+         isPw = true;
+
+      }
+
+      
+
+      setState ({
+         ...state,
+         비밀번호 : value,
+         isPw : isPw,
+         isPwMsg : isPwMsg
+      })
+   }
+
+
+
+   
 
 
 
 
 
-
+   //////////// 주소 검색 및 주소 세터 함수 //////////////////////
    // 1. 주소 저장소(세션스토리지)에서 검색된 주소 가져오기(getter)
    // 2. 가져온 주소는 문자열 형태이다. JSON.stringify()로 변환된 문자열.
    //    그래서 다시 객체형태로 변환하여 사용한다. JSON.parse(); 
@@ -24,8 +128,21 @@ export default function SignUpComponent(){
    
    const getAddressSessionStorage=()=>{
 
-      // 가져올 주소가 없으면 리턴
-      if (sessionStorage.getItem('SHADDRESS')===null){
+      // 가져올 주소가 없으면 리턴 (가져올 주소가 없을 시 실행안됨)
+      // 예외처리1
+      //if (sessionStorage.getItem('SHADDRESS')===null){
+      //   return;
+      //}
+
+      // 예외처리2
+      try { //가져올 주소가 없으면 리턴 (이유는 JSON.parse(null));
+         const result = JSON.parse(sessionStorage.getItem('SHADDRESS'));
+         setState({
+            주소1:result.주소1, 
+            주소2:result.주소2
+         });
+      }
+      catch(e){
          return;
       }
 
@@ -39,6 +156,22 @@ export default function SignUpComponent(){
    React.useEffect(()=>{
       getAddressSessionStorage()
    },[]);
+
+
+   // 주소 검색 버튼 클릭 이벤트 (주소검색 팝업 띄우기)
+   const onClickAddrSearch=(e)=>{
+      e.preventDefault();
+      const _file = './popup.html';
+      const _winName = '_address_search_popup';
+      const _winHeight = window.innerHeight;
+      const _winWidth = window.innerWidth;
+      const _popWidth = 530;
+      const _popHeight = 569;
+      const _top = (_winHeight-_popHeight)/2;   // 화면의 가운데 수직좌표
+      const _left = (_winWidth-_popWidth)/2;    // 화면의 가운데 수평좌표
+      window.open(_file,_winName,`width=${_popWidth}, height=${_popHeight}, top=${_top}, left=${_left}`);
+   }
+   
 
 
    
@@ -78,18 +211,36 @@ export default function SignUpComponent(){
                      <li>  {/* <!-- ID --> */}
                         <div>
                            <em>아이디<i>*</i></em>
-                           <input type="text" name="user_id" id="userId" maxLength={16} placeholder="아이디를 입력해주세요"/>
+                           <input 
+                           type="text" 
+                           name="user_id" 
+                           id="userId" 
+                           maxLength={16} 
+                           placeholder="아이디를 입력해주세요"
+                           onChange={onChangeUserId}
+                           value={state.아이디}
+                           />
                            <button className="id-ok-btn">중복확인</button>
                         </div>
-                        <p className="isError"></p>
+                        <p className={`isError${state.isId===false? ' on' : ''}`}>{state.isIdMsg}</p>
                      </li>
 
                      <li>
                         <div>
                            <em>비밀번호<i>*</i></em>
-                           <input type="text" name="user_pass" id="userPass" maxLength={16} placeholder="비밀번호를 입력해주세요"/>
+                           <input 
+                           type="text" 
+                           name="user_pass" 
+                           id="userPass" 
+                           maxLength={16} 
+                           placeholder="비밀번호를 입력해주세요"
+                           onChange={onChangeUserPw}
+                           value={state.비밀번호}
+                           
+
+                           />
                         </div> 
-                        <p className="isError"></p>
+                        <p className={`isError${state.isPw===false ? ` on` : ''}`}>{state.isPwMsg}</p>
                      </li>
 
                      <li>
@@ -122,8 +273,8 @@ export default function SignUpComponent(){
                            <em>휴대폰<i>*</i></em>
                            <input type="text" name="user_phone" id="userPhone" placeholder="숫자만 입력해주세요"/>
                            {/* <!-- disabled=false => 제이쿼리 구현 --> */}
-                           <button className="hp-num-btn" disabled="true">인증번호 받기</button>
-                           <button className="hp-num-btn2" disabled="true">다른번호 인증</button>
+                           <button className="hp-num-btn" disabled>인증번호 받기</button>
+                           <button className="hp-num-btn2">다른번호 인증</button>
                         </div>
                         <p className="isError"></p>
                      </li>   
@@ -133,7 +284,7 @@ export default function SignUpComponent(){
                            <input type="text" name="userhp_num_box" id="userHpNumBox" placeholder="인증번호를 입력해주세요"/>
                            {/* <!-- disabled=false => 제이쿼리 구현 --> */}
                            <span className="hp-count"><i className="count-minutes">02</i>:<i className="count-seconds">59</i></span>
-                           <button className="hp-ok-btn" disabled="false">인증번호 확인</button>
+                           <button className="hp-ok-btn" disabled>인증번호 확인</button>
                         </div>
                      </li> 
 
@@ -146,9 +297,9 @@ export default function SignUpComponent(){
                            id="addr1" 
                            placeholder="주소검색 API"
                            onChange={onChangeAddr1}
-                           value={state}
+                           value={state.주소1}
                            />
-                           <button onClick={onClickResearchAddress} value={} className="address-research-btn"><img src="./img/ico_search.svg" alt=""/>재검색</button>
+                           <button className="address-research-btn"><img src="./img/ico_search.svg" alt=""/>재검색</button>
                         </div>
                      </li> 
 
@@ -168,7 +319,11 @@ export default function SignUpComponent(){
                      <li className="addr addr3 on">
                         <div>
                            <em>주소<i>*</i></em>
-                           <button className="address-search-btn"><img src="./img/ico_search.svg" alt=""/>주소검색</button>
+                           <button 
+                           className="address-search-btn" 
+                           onClick={onClickAddrSearch}
+                           ><img src="./img/ico_search.svg" alt=""/>주소검색
+                           </button>
                         </div>
                      </li>
 
@@ -304,5 +459,37 @@ export default function SignUpComponent(){
       </section>
    </main>
    )
-}
+}  // 회원가입폼 컴포넌트 SignUpComponent
 
+SignUpComponent.defaultProps = {
+   회원가입 : {
+
+      아이디:'',           
+      아이디중복확인:false,
+      isId:false,
+      isIdMsg:'',
+      
+      비밀번호:'',         
+      비밀번호확인:false, 
+      isPw : false,
+      isPwMsg:'',
+      
+      이름:'',             
+      
+      이메일:'',           
+      이메일중복확인:false,
+      
+      휴대폰:'',           
+      휴대폰인증번호:0,  
+      분:2,
+      초:59,
+      setId:0,
+
+      주소1:'',             
+      주소2:'',             
+      성별:'' ,            
+      생년월일:'',         
+      추가입력사항:'',     
+      이용약관동의: []    
+   }
+}
