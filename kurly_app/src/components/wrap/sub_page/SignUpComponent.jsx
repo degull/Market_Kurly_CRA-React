@@ -38,7 +38,7 @@ export default function SignUpComponent( props ){
       // 2. 한글입력사용안됨
       //모두 오류라면
       //한글이라면 또는 영문과 숫자 조합이 아니라면 오류 && 6~16가 아니라면 오류 && 연속된 글자가 3자 이상이면 오류
-      if( regExp2.test(value) === true || regExp3.test(value) === false || regExp4.test($(this).val()) === false || regExp5.test(value) === true || regExp6.test(value) === true ){   
+      if( regExp2.test(value) === true || regExp3.test(value) === false || regExp4.test(value) === false || regExp5.test(value) === true || regExp6.test(value) === true ){   
          isIdMsg = "6자 이상 16자 이하의 영문 혹은 영문과 숫자를 조합, 한글허용안함, 공백허용안함, 동일한 문자 연속 3자 이상 허용 안함";
          isId = false;
       }
@@ -59,6 +59,46 @@ export default function SignUpComponent( props ){
 
 
    // [1]-1 아이디 중복확인
+   const onClickIdOkBtn=(e)=>{
+      e.preventDefault(e);
+      const regExp1 = /[`~!@#$%^&*()_\-+=|\\\[\]\\\{}"';:\/?\.\,>,<]/g;   //특수문자
+      const regExp2 = /[가-하ㄱ-ㅎㅏ-ㅣ]/g;    //한글
+      const regExp3 = /[A-Za-z]+[0-9]/g;  //영문과 숫자의 조합 (영문은 반드시 존재해야하지만 숫자는 존재해도되고 안해도됨(*표시 사용))
+      const regExp4 = /.{6,16}/g;       //모든 글자는 .으로 대체 && 6~16자 이하   
+      const regExp5 = /(.)\1\1\1/g;       //동일한 연속된 문자 3글자 이상은 불가   /* 연속글자를 찾는 방법 */
+      const regExp6 = /\s/g;     //공백허용안함
+
+      let value = state.아이디; // 상태관리 아이디를 value 변수에 저장
+      let 아이디= '';
+      let isId = false;
+      let isIdMsg = '';
+      let 아이디중복확인 = false;    // 아이디 중복확인 변수
+      
+
+      아이디 = value.replace(regExp1, '');
+
+
+      if( regExp2.test(value) === true || regExp3.test(value) === false || regExp4.test(value) === false || regExp5.test(value) === true || regExp6.test(value) === true ){   
+         isIdMsg = "6자 이상 16자 이하의 영문 혹은 영문과 숫자를 조합, 한글허용안함, 공백허용안함, 동일한 문자 연속 3자 이상 허용 안함";
+         isId = false;
+         아이디중복확인 = false;
+      }
+
+      else {                                     
+         isIdMsg = '';
+         isId = true;
+         아이디중복확인 = true;
+         // 데이터베이스 연동 아이디 중복확인
+      }
+
+      setState ({
+         ...state,
+         isIdMsg : isIdMsg,
+         isId : isId,
+         아이디중복확인 : 아이디중복확인
+      })
+      
+   }
 
 
    // [2] 비밀번호 입력상자
@@ -108,6 +148,97 @@ export default function SignUpComponent( props ){
          isPwMsg : isPwMsg
       })
    }
+
+
+   // [2]-1 비밀번호 확인 입력상자
+   const onChangeUserPw2=(e)=>{
+      const {value} = e.target
+      let isPw2 = false;
+      let isPw2Msg = '';
+
+      if ( state.비밀번호 !== value ){
+         isPw2 = false;
+         isPw2Msg = '동일한 비밀번호를 입력';
+      }
+      else {
+         isPw2 = true;
+         isPw2Msg = '';
+      }
+
+      setState({
+         ...state,
+         isPw2:isPw2,
+         isPw2Msg:isPw2Msg,
+         비밀번호확인:value
+      })
+   }
+
+
+   // [3] 이름
+   const onChangeUserName=(e)=>{
+      const {value} = e.target;
+      let isName= false;
+      let isNameMsg= '';
+      let 이름 = '';
+
+      const regExp1 = /[`~!@#$%^&*()_\-+=|\\\[\]{}'";:\/?\.>,<]/g;  // 영문
+      const regExp2 = /[A-Za-z0-9가-힣ㄱ-ㅎㅏ-ㅣ\s]{1,20}/g;  // 영문
+    
+      이름 = value.replace(regExp1,''); // 특수문자 삭제
+      
+      if( regExp2.test(value)===false ){ // 
+         isName= false;
+         isNameMsg = '이름을 입력해 주세요.';
+      }
+      else {
+         isName= true;
+         isNameMsg = '';
+      }
+
+      setState({
+         ...state,
+         isName: isName,
+         isNameMsg: isNameMsg,
+         이름: 이름
+      })
+   }
+
+
+   // [4] 이메일 입력상자
+   const onChangeUserEmail=(e)=>{
+      const {value} = e.target;
+      let isEmail = false;
+      let isEmailMsg = '';
+
+      const regExp1 = /^[A-Za-z0-9`~!#$%^&*_\-+=|{}'\/?]+[\.]?[A-Za-z0-9`~!#$%^&*_\-+=|{}'\/?]*@[A-Za-z0-9~\-_\.]+\.[A-Za-z]{2,3}$/g;  // 이메일
+      const regExp2 = /\s/g;  
+
+      if(value!=='') {   
+         if (regExp1.test(value) === false || regExp2.test(value) === true) {
+            isEmailMsg = '이메일 형식으로 입력해주세요';
+            isEmail = false;
+         }
+         else {
+            isEmailMsg = '';
+            isEmail = true;
+         }
+      }
+      else {      
+         isEmailMsg ='이메일을 입력해주세요';
+      }
+
+      setState({
+         ...state,
+         isEmail:isEmail,
+         isEmailMsg:isEmailMsg,
+         이메일:value
+      })
+
+   }
+
+      // [4]-1 이메일 중복
+
+   
 
 
 
@@ -220,7 +351,10 @@ export default function SignUpComponent( props ){
                            onChange={onChangeUserId}
                            value={state.아이디}
                            />
-                           <button className="id-ok-btn">중복확인</button>
+                           <button 
+                              className="id-ok-btn"
+                              onClick={onClickIdOkBtn}
+                           >중복확인</button>
                         </div>
                         <p className={`isError${state.isId===false? ' on' : ''}`}>{state.isIdMsg}</p>
                      </li>
@@ -246,26 +380,48 @@ export default function SignUpComponent( props ){
                      <li>
                         <div>
                            <em>비밀번호확인<i>*</i></em>
-                           <input type="text" name="user_pass2" id="userPass2" placeholder="비밀번호를 한번 더 입력해주세요"/>
+                           <input 
+                           type="text" 
+                           name="user_pass2" 
+                           id="userPass2" 
+                           placeholder="비밀번호를 한번 더 입력해주세요"
+                           onChange={onChangeUserPw2}
+                           value={state.비밀번호확인}
+                           />
                         </div>
-                        <p className="isError"></p>
+                        <p className={`${state.isPw2===false? ' on':'' }`}>{state.isPw2Msg}</p>
                      </li> 
 
                      <li>
                         <div>
                            <em>이름<i>*</i></em>
-                           <input type="text" name="user_name" id="userName" maxLength={20} placeholder="이름을 입력해주세요"/>
+                           <input 
+                           type="text" 
+                           name="user_name" 
+                           id="userName" 
+                           maxLength={20} 
+                           placeholder="이름을 입력해주세요"
+                           onChange={onChangeUserName}
+                           value={state.이름}
+                           />
                         </div>
-                        <p className="isError"></p>
+                        <p className={`isError${state.isName===false ? ' on' : ''}`}>{state.isNameMsg}</p>
                      </li>
 
                      <li>
                         <div>
                            <em>이메일<i>*</i></em>
-                           <input type="text" name="user_email" id="userEmail" placeholder="예:marketKurly@kurly.com"/>
+                           <input 
+                           type="text" 
+                           name="user_email" 
+                           id="userEmail" 
+                           placeholder="예:marketKurly@kurly.com"
+                           onChange={onChangeUserEmail}
+                           value={state.이메일}
+                           />
                            <button className="email-ok-btn">중복확인</button>
                         </div>
-                        <p className="isError"></p>
+                        <p className={`isError${state.isEmail === false ? ' on' : ''}`}>{state.isEmailMsg}</p>
                      </li>   
 
                      <li className="hp hp1">
@@ -470,14 +626,22 @@ SignUpComponent.defaultProps = {
       isIdMsg:'',
       
       비밀번호:'',         
-      비밀번호확인:false, 
       isPw : false,
       isPwMsg:'',
+
+      비밀번호확인:'', 
+      isPw2 : false,
+      isPw2Msg : '',
+
       
-      이름:'',             
+      이름:'',        
+      isName:false,
+      isNameMsg :'',
       
       이메일:'',           
       이메일중복확인:false,
+      isEmail:false,
+      isEmailMsg:'',
       
       휴대폰:'',           
       휴대폰인증번호:0,  
