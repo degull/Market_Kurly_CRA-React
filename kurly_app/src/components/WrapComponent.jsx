@@ -52,9 +52,8 @@ export default function WrapComponent(){
             if ( minutes < 0) {
 
                alert('유효시간이 만료되었습니다. 다시 시도해 주세요' );
-               clearInterval (state.setId );
+               clearInterval ( setId );
 
-              
                seconds = 0;
                minutes = 0;
             }

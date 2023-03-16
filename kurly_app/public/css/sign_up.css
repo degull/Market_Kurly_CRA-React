@@ -69,10 +69,13 @@
 #wrap #mainSignUp .container .content form ul li.addr2.on {
   display: block;
 }
-#wrap #mainSignUp .container .content form ul li.addr3.on {
+#wrap #mainSignUp .container .content form ul li.addr3 {
   display: block;
 }
-#wrap #mainSignUp .container .content form ul li.addr3 .addr-search-btn {
+#wrap #mainSignUp .container .content form ul li.addr3.on {
+  display: none;
+}
+#wrap #mainSignUp .container .content form ul li.addr3 .address-search-btn {
   position: relative;
   width: 100%;
 }
@@ -184,12 +187,18 @@
 }
 #wrap #mainSignUp .container .content form ul li.add-input {
   display: none;
-}
-#wrap #mainSignUp .container .content form ul li.add-input.on {
-  display: block;
+  height: auto;
+  padding-top: 0;
+  padding-bottom: 0;
 }
 #wrap #mainSignUp .container .content form ul li.add-input div {
   display: block;
+  height: auto;
+}
+#wrap #mainSignUp .container .content form ul li.add-input div p {
+  padding: 10px 0;
+  color: #999;
+  height: auto;
 }
 #wrap #mainSignUp .container .content form ul li.add-input div #addInputBox2 {
   display: none;
@@ -197,25 +206,35 @@
 #wrap #mainSignUp .container .content form ul li.add-input div .add-input-p2 {
   display: none;
 }
-#wrap #mainSignUp .container .content form ul li.add-input div p {
-  font-size: 11px;
-  font-weight: 500;
-  color: #333;
-}
-#wrap #mainSignUp .container .content form ul li.add-input.on {
+#wrap #mainSignUp .container .content form ul li.add-input.on1 {
   display: block;
 }
-#wrap #mainSignUp .container .content form ul li.add-input.on #addInputBox2 {
+#wrap #mainSignUp .container .content form ul li.add-input.on1 #addInputBox1 {
   display: block;
 }
-#wrap #mainSignUp .container .content form ul li.add-input.on .add-input-p2 {
-  display: block;
-}
-#wrap #mainSignUp .container .content form ul li.add-input.on #addInputBox1 {
+#wrap #mainSignUp .container .content form ul li.add-input.on1 #addInputBox2 {
   display: none;
 }
-#wrap #mainSignUp .container .content form ul li.add-input.on .add-input-p1 {
+#wrap #mainSignUp .container .content form ul li.add-input.on1 .add-input-p1 {
+  display: block;
+}
+#wrap #mainSignUp .container .content form ul li.add-input.on1 .add-input-p2 {
   display: none;
+}
+#wrap #mainSignUp .container .content form ul li.add-input.on2 {
+  display: block;
+}
+#wrap #mainSignUp .container .content form ul li.add-input.on2 #addInputBox1 {
+  display: none;
+}
+#wrap #mainSignUp .container .content form ul li.add-input.on2 #addInputBox2 {
+  display: block;
+}
+#wrap #mainSignUp .container .content form ul li.add-input.on2 .add-input-p1 {
+  display: none;
+}
+#wrap #mainSignUp .container .content form ul li.add-input.on2 .add-input-p2 {
+  display: block;
 }
 #wrap #mainSignUp .container .content form ul li.row-line {
   padding: 10px 0;
@@ -372,7 +391,7 @@
   color: #5f0080;
   border-color: #5f0080;
 }
-#wrap #mainSignUp .container .content form ul li div button.address-research-btn img {
+#wrap #mainSignUp .container .content form ul li div button.addr-research-btn img {
   width: 20px;
 }
 #wrap #mainSignUp .container .content form ul li div button.addr-search-btn img {
@@ -403,7 +422,7 @@
 }
 
 #formEventModal {
-  display: none;
+  display: block;
   z-index: 5;
   position: fixed;
   top: 0;

@@ -67,10 +67,11 @@
                         }
                      }
                      &.addr3 {      //주소검색
+                        display: block;
                         &.on {
-                           display: block;
+                           display: none;
                         }
-                        .addr-search-btn {
+                        .address-search-btn {
                            position: relative;
                            width: 100%;
                         }
@@ -199,36 +200,56 @@
 
                      &.add-input {
                         display: none;
-                        &.on {
-                           display: block;
-                        }
+                        height: auto;
+                        padding-top: 0;
+                        padding-bottom: 0;
+
                         div {
                            display: block;
-                           #addInputBox2 {
-                              display: none;
-                           }
-                           .add-input-p2 {
-                              display: none;
-                           }
+                           height: auto;
                            p {
-                              font-size: 11px;
-                              font-weight: 500;
-                              color: #333;
+                              padding: 10px 0;
+                              color: #999;
+                              height: auto;
                            }
-                        }
-                        &.on {
-                           display: block;
                            #addInputBox2 {
-                              display: block;
+                              display: none;
                            }
                            .add-input-p2 {
+                              display: none;
+                           }
+
+                        }
+                        // 추천인 아이디
+                        &.on1 {
+                           display: block;
+                           #addInputBox1 {
                               display: block;
                            }
-                           #addInputBox1 {
+                           #addInputBox2 {
                               display: none;
                            }
                            .add-input-p1 {
+                              display: block;
+                           }
+                           .add-input-p2 {
                               display: none;
+                           }
+                        }
+                        // 참여 이벤트명
+                        &.on2 {
+                           display: block;
+                           #addInputBox1 {
+                              display: none;
+                           }
+                           #addInputBox2 {
+                              display: block;
+                           }
+                           .add-input-p1 {
+                              display: none;
+                           }
+                           .add-input-p2 {
+                              display: block;
                            }
                         }
                      }
@@ -405,7 +426,7 @@
 
 
                            //주소
-                           &.address-research-btn {   //재검색
+                           &.addr-research-btn {   //재검색
                               img {
                                  width: 20px;
                               }
@@ -453,7 +474,7 @@
 }
 
    #formEventModal {
-      display: none;
+      display: block;
       z-index: 5;
       position: fixed;
       top: 0;
