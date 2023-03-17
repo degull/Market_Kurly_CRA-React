@@ -486,7 +486,6 @@ export default function SignUpComponent( {회원가입, setCountPlay, setId, sec
 
       // 주소 팝업창 API 띄우기
       const addressPopUpAPI=(e)=>{
-         e.preventDefault();
          const _file = './popup.html';
          const _winName = '_address_search_popup';
          const _winHeight = window.innerHeight;
@@ -1054,7 +1053,11 @@ export default function SignUpComponent( {회원가입, setCountPlay, setId, sec
                         <div>
                            <input type="text" name="add_input_box" id="addInputBox1" placeholder="추천인 아이디를 입력해주세요"/>
                            <input type="text" name="add_input_box" id="addInputBox2" placeholder="참여 이벤트명을 입력해주세요"/>
-                           <button className="addr-search-btn">아이디 확인</button>
+
+                           {  /* 아이디 확인 버튼은 state.isAddon === false이면 보이고 그렇지 않으면 숨김 */
+                              state.isAdd === false ? <button className="address-search-btn">아이디 확인</button>:``
+
+                           }
                         </div>
                      </li>
 
@@ -1193,11 +1196,11 @@ SignUpComponent.defaultProps = {
       isEmail:false,
       isEmailMsg:'',
       
-      휴대폰:'',     
+      휴대폰:'', 
+      isHp : false,    
+      isHp2 : false,    
       isHpDisabled : true,
-      isHp : false,
       isHpMsg : '',
-      isHp2 : false,
       isHpNumBtn2 : false,
 
       인증번호입력값:'',

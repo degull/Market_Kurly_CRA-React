@@ -38,7 +38,7 @@
             form {
                ul {
                   width: 100%;
-                  li {
+                  >li {
                      width: 100%;
                      position: relative;
                      padding: 10px 20px;
@@ -183,7 +183,7 @@
                               p {
                                  line-height: 130%;
                               }
-                              input[type="radio"] {
+                              input[type=radio] {
                                  width: 24px;
                                  height: 24px;
                                  appearance: none;
@@ -206,11 +206,12 @@
 
                         div {
                            display: block;
-                           height: auto;
+                           //height: auto;
                            p {
+                              font-size: 10px;
                               padding: 10px 0;
                               color: #999;
-                              height: auto;
+                              //height: auto;
                            }
                            #addInputBox2 {
                               display: none;
@@ -426,12 +427,12 @@
 
 
                            //주소
-                           &.addr-research-btn {   //재검색
+                           &.address-research-btn {   //재검색
                               img {
                                  width: 20px;
                               }
                            }
-                           &.addr-search-btn {  //주소검색
+                           &.address-search-btn {  //주소검색
                               img {
                                  width: 20px;
                               }
