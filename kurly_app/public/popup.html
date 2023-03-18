@@ -207,8 +207,16 @@
                   submitBtn.addEventListener('click', function(e){
                      e.preventDefault();
                      // 팝업창(자식창)에서 검색된 주소를 부모창의 주소 입력란 2개에 나누어서 각각 보낸다 => 바인딩!!
-                     opener.document.getElementById('addr1').value = addr1.value;
-                     opener.document.getElementById('addr2').value = addr2.value;
+                     // 부모창 addr 클래스에 on 클래스 추가
+                     
+                     opener.document.querySelector('.addr1').classList.add('on');
+                     opener.document.querySelector('.addr2').classList.add('on');
+                     opener.document.querySelector('.addr3').classList.add('on');
+                     opener.document.querySelector('.addr4').classList.add('on');
+                     //opener.document.getElementById('addr').classList.remove('on');  //삭제
+
+                     opener.document.querySelector('#addr1').value = addr1.value;
+                     opener.document.querySelector('#addr2').value = addr2.value;
 
                      // 부모창 (opener)의 저장소 (로컬스토리지, 로컬, 세션, 쿠키)
                      // 부모창에서 새로고침해도 주소가 유지되게 해야한다. (리액트)

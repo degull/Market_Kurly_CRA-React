@@ -721,30 +721,151 @@ export default function SignUpComponent( {회원가입, setCountPlay, setId, sec
          추가입력사항 : e.target.value,
          isAdd : true,
          isAddOn : isAddOn
+      });
+   }
+
+   // [9]-1. 추천인 아이디 onChange() 이벤트
+   const onChangeChooCheonId=(e)=>{
+      setState({
+         ...state,
+         추천인아이디 : e.target.value
       })
    }
 
-      // [10]. 이용약관동의 : 체크박스
 
-      // [11]. 유효성검사 서버에 전송
 
-      // [12]. 데이터베이스 서버 : 회원가입 테이블 생성
+   // [9]-2. 참여 이벤트명
+   const onChangeChamEvent=(e)=>{
+      setState({
+         ...state,
+         참여이벤트명 : e.target.value
+      })
+   }
 
-      // [13]. PHP => SQL => DB저장
 
-      // [14]. 아이디 중복확인
 
-      // [15]. 이메일 중복확인
+   // [10]. 이용약관동의 : 체크박스 (모두체크)
+   const onChangeServiceCheckAll=(e)=>{
 
-      // [16]. 깃허브 배포(CORS)
+      // 전체 체크하면 이용약관동의 배열 상태관리 변수에 저장한다.
+      // 체크 상자 7개 모두 체크되도록..
+      // 전체 체크 해제하면 상자 7개 모두 체크해제한다..
+      // 7개 이용약관동의 목록이 저장된다.
 
-      // [17]. 로그인 => 회원가입 끝 => 회원정보 수정
+      if ( e.target.checked === true ){
+         setState({
+            ...state,
+            이용약관동의:state.이용약관 // 7개 항목 저장
+         })
+      }
+      else {
+         setState({
+            ...state,
+            이용약관동의 : []   //빈배열(삭제)
+         })
+      }
 
-      // [18]. 로그아웃
+   }
 
-      // [19]. 회원관리 목록 출력 게시판
 
-      // [20].  공지사항 게시판
+   // [10]-1. 이용약관동의 : 개별체크
+   const onChangeServiceCheck=(e)=>{
+      // 체크하면 체크된 항목 값 배열에 저장
+      // 체크해제하면 배열에서 삭제
+      if ( e.target.checked === true ){
+
+         // 1. 무료배송 선택되면 : SMS와 이메일 자동 체크된다.
+         if ( e.target.value === '무료배송,할인쿠폰 등 혜택/정보 수신 동의(선택)' ){
+            setState({
+               ...state,
+               이용약관동의 : [...state.이용약관동의,  e.target.value ,'SMS', '이메일']
+            })
+         }
+         else if (state.이용약관동의.includes('SMS') === true && e.target.value === '이메일'){    //'SMS'가 체크된 상태 그리고 이메일을 선택하면 무료배송,할인쿠폰 등 혜택/정보 수신 동의(선택)을 저장한다. 
+            setState({
+               ...state,
+               이용약관동의 : [...state.이용약관동의, e.target.value ,'무료배송,할인쿠폰 등 혜택/정보 수신 동의(선택)' ]
+            })
+         }
+
+         else if (state.이용약관동의.includes('이메일') === true && e.target.value === "SMS"){
+            setState({
+               ...state,
+               이용약관동의 : [...state.이용약관동의,  e.target.value ,'무료배송,할인쿠폰 등 혜택/정보 수신 동의(선택)' ]
+            })
+         }
+         else {
+            setState({
+               ...state,
+               이용약관동의 : [...state.이용약관동의, e.target.value]
+            })
+         }
+
+      }
+
+
+
+      else {
+
+         // 1. 무료배송을 해제하면 : SMS, 이메일 두개를 모두 삭제한다. 
+         if ( e.target.value === '무료배송,할인쿠폰 등 혜택/정보 수신 동의(선택)' ) {
+            let imsi = state.이용약관동의.filter((item)=>item!=='SMS');
+               imsi = imsi.filter((item)=>item!=='이메일');
+               imsi = imsi.filter((item)=>item!=='무료배송,할인쿠폰 등 혜택/정보 수신 동의(선택)');
+               
+               setState({
+                  ...state,
+                  이용약관동의:imsi
+               })
+         }
+
+         else if ( e.target.value === "SMS" && state.이용약관동의.includes('이메일') === true ) {
+            let imsi = state.이용약관동의.filter((item)=>item!=='SMS');
+                imsi = imsi.filter((item)=>item!=='무료배송,할인쿠폰 등 혜택/정보 수신 동의(선택)');
+                setState({
+                  ...state,
+                  이용약관동의:imsi
+               })
+         }
+
+         else if ( e.target.value === "이메일" && state.이용약관동의.includes('SMS') === true ) {
+            let imsi = state.이용약관동의.filter((item)=>item!==' 이메일');
+                imsi = imsi.filter((item)=>item!=='무료배송,할인쿠폰 등 혜택/정보 수신 동의(선택)');
+                setState({
+                  ...state,
+                  이용약관동의:imsi
+               })
+         }
+
+         else {
+            setState({
+               ...state,
+                           // 체크 해제하면 해제항목을 제외한 모든 배열값을 저장한다.
+               이용약관동의 : state.이용약관동의.filter((item)=>item!== e.target.value)
+         })
+      }
+   }
+}
+
+   // [11]. 유효성검사 서버에 전송
+
+   // [12]. 데이터베이스 서버 : 회원가입 테이블 생성
+
+   // [13]. PHP => SQL => DB저장
+
+   // [14]. 아이디 중복확인
+
+   // [15]. 이메일 중복확인
+
+   // [16]. 깃허브 배포(CORS)
+
+   // [17]. 로그인 => 회원가입 끝 => 회원정보 수정
+
+   // [18]. 로그아웃
+
+   // [19]. 회원관리 목록 출력 게시판
+
+   // [20].  공지사항 게시판
 
    
 
@@ -930,7 +1051,7 @@ export default function SignUpComponent( {회원가입, setCountPlay, setId, sec
                      <li className={`addr addr4${state.isAddr === true ? ' on' :''}`}>
                         <div>
                            <strong>샛별배송</strong>
-                           <p>배송지에 따라 상품 정보가 달라질 수 있습니다.</p>
+                           <h5>배송지에 따라 상품 정보가 달라질 수 있습니다.</h5>
                         </div>
                      </li>
 
@@ -1051,8 +1172,22 @@ export default function SignUpComponent( {회원가입, setCountPlay, setId, sec
 
                      <li className={`radio add-input${state.isAdd === false ? '' :(state.isAddOn === false ? ' on1' :' on2')}`}>
                         <div>
-                           <input type="text" name="add_input_box" id="addInputBox1" placeholder="추천인 아이디를 입력해주세요"/>
-                           <input type="text" name="add_input_box" id="addInputBox2" placeholder="참여 이벤트명을 입력해주세요"/>
+                           <input 
+                              type="text" 
+                              name="add_input_box" 
+                              id="addInputBox1" 
+                              placeholder="추천인 아이디를 입력해주세요"
+                              onChange={onChangeChooCheonId}
+                              value={state.추천인아이디}
+                           />
+                           <input 
+                              type="text" 
+                              name="add_input_box" 
+                              id="addInputBox2" 
+                              placeholder="참여 이벤트명을 입력해주세요"
+                              onChange={onChangeChamEvent}
+                              value={state.참여이벤트명}
+                           />
 
                            {  /* 아이디 확인 버튼은 state.isAddon === false이면 보이고 그렇지 않으면 숨김 */
                               state.isAdd === false ? <button className="address-search-btn">아이디 확인</button>:``
@@ -1083,46 +1218,46 @@ export default function SignUpComponent( {회원가입, setCountPlay, setId, sec
                      <li className="service service-all">
                         <div>
                            <em>이용약관동의<i>*</i></em>
-                           <label htmlFor="chkAll"><input type="checkbox" name="chk_all" id="chkAll" value="전체 동의합니다."/>전체 동의합니다.</label>
+                           <label htmlFor="chkAll"><input onChange={onChangeServiceCheckAll} type="checkbox" name="chk_all" id="chkAll" value="전체 동의합니다." checked={state.이용약관동의.length===7?true:false} />전체 동의합니다.</label>
                            <p>선택항목에 동의하지 않은 경우도 회원가입 및 일반적인 서비스를 이용할 수 있습니다.</p>
                         </div>
                      </li>
 
                      <li className="service">
                         <div>
-                           <label htmlFor="chk1"><input type="checkbox" name="chk_1" id="chk1" value="이용약관 동의"/>이용약관 동의</label><i>(필수)</i>
+                           <label htmlFor="chk1"><input onChange={onChangeServiceCheck} type="checkbox" name="chk_1" id="chk1" value="이용약관 동의(필수)" checked={state.이용약관동의.includes('이용약관 동의(필수)')} />이용약관 동의</label><i>(필수)</i>
                         </div>
                      </li>
 
                      <li className="service">
                         <div>
-                           <label htmlFor="chk2"><input type="checkbox" name="chk_2" id="chk2" value="개인정보 수집∙이용 동의"/>개인정보 수집∙이용 동의</label><i>(필수)</i>
+                           <label htmlFor="chk2"><input onChange={onChangeServiceCheck} type="checkbox" name="chk_2" id="chk2" value="개인정보 수집∙이용 동의(필수)" checked={state.이용약관동의.includes('개인정보 수집∙이용 동의(필수)')} />개인정보 수집∙이용 동의</label><i>(필수)</i>
                         </div>
                      </li>
 
                      <li className="service">
                         <div>
-                           <label htmlFor="chk3"><input type="checkbox" name="chk_3" id="chk3" value="개인정보 수집∙이용 동의"/>개인정보 수집∙이용 동의</label><i>(선택)</i>
+                           <label htmlFor="chk3"><input onChange={onChangeServiceCheck} type="checkbox" name="chk_3" id="chk3" value="개인정보 수집∙이용 동의(선택)" checked={state.이용약관동의.includes('개인정보 수집∙이용 동의(선택)')} />개인정보 수집∙이용 동의</label><i>(선택)</i>
                         </div>
                      </li>
 
                      <li className="service">
                         <div>
-                           <label htmlFor="chk4"><input type="checkbox" name="chk_4" id="chk4" value="무료배송,할인쿠폰 등 혜택/정보 수신 동의"/>무료배송,할인쿠폰 등 혜택/정보 수신 동의</label><i>(선택)</i>
+                           <label htmlFor="chk4"><input onChange={onChangeServiceCheck} type="checkbox" name="chk_4" id="chk4" value="무료배송,할인쿠폰 등 혜택/정보 수신 동의(선택)" checked={state.이용약관동의.includes('무료배송,할인쿠폰 등 혜택/정보 수신 동의(선택)')} />무료배송,할인쿠폰 등 혜택/정보 수신 동의</label><i>(선택)</i>
                         </div>
                      </li>
 
                      <li className="service chk56">
                         <div>
-                           <label htmlFor="chk5"><input type="checkbox" name="chk_5" id="chk5" value="SMS"/>SMS</label>
-                           <label htmlFor="chk6"><input type="checkbox" name="chk_6" id="chk6" value="이메일"/>이메일</label>
+                           <label htmlFor="chk5"><input onChange={onChangeServiceCheck} type="checkbox" name="chk_5" id="chk5" value="SMS" checked={state.이용약관동의.includes('SMS')} />SMS</label>
+                           <label htmlFor="chk6"><input onChange={onChangeServiceCheck} type="checkbox" name="chk_6" id="chk6" value="이메일" checked={state.이용약관동의.includes('이메일')} />이메일</label>
                            <p>동의 시 한 달간[5%적립]+[2만원 이상 무료배송]첫 주문 후 안내</p>
                         </div>
                      </li>
 
                      <li className="service">
                       <div>
-                           <label htmlFor="chk7"><input type="checkbox" name="chk_7" id="chk7" value="본인은 만 14세 이상입니다."/>본인은 만 14세 이상입니다.</label><i>(필수)</i>
+                           <label htmlFor="chk7"><input onChange={onChangeServiceCheck} type="checkbox" name="chk_7" id="chk7" value="본인은 만 14세 이상입니다.(필수)" checked={state.이용약관동의.includes('본인은 만 14세 이상입니다.(필수)')} />본인은 만 14세 이상입니다.</label><i>(필수)</i>
                         </div>
                      </li>
 
@@ -1226,7 +1361,18 @@ SignUpComponent.defaultProps = {
       추가입력사항:'',     
       isAdd : false,
       isAddOn : false,
+      추천인아이디:'',
+      참여이벤트명:'',
 
+      이용약관 : [
+         '이용약관 동의(필수)',
+         '개인정보 수집∙이용 동의(필수)',
+         '개인정보 수집∙이용 동의(선택)',
+         '무료배송,할인쿠폰 등 혜택/정보 수신 동의(선택)',
+         'SMS',
+         '이메일',
+         '본인은 만 14세 이상입니다.(필수)',
+      ],
       이용약관동의: [],
 
       isModal : false,   //컨펌모달

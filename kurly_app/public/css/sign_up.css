@@ -100,7 +100,7 @@
 #wrap #mainSignUp .container .content form ul > li.addr4 div.on strong {
   display: block;
 }
-#wrap #mainSignUp .container .content form ul > li.addr4 div p {
+#wrap #mainSignUp .container .content form ul > li.addr4 div h5 {
   font-size: 12px;
   color: #666;
   line-height: 18px;
@@ -283,11 +283,11 @@
      -moz-appearance: none;
           appearance: none;
   margin: 0 10px 0 0;
-  background: url(../img/check_none.svg) no-repeat 50% 50%;
+  background: url(../img/signup/checkbox_none.svg) no-repeat 50% 50%;
   border-radius: 50%;
 }
 #wrap #mainSignUp .container .content form ul > li.service div label input[type=checkbox]:checked {
-  background: url(../img/check_ok.svg) no-repeat 50% 50%;
+  background: url(../img/signup/checkbox.svg) no-repeat 50% 50%;
 }
 #wrap #mainSignUp .container .content form ul > li.service div p {
   padding-left: 0;

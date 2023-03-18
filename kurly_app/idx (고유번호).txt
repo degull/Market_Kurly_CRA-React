@@ -1,0 +1,12 @@
+idx (고유번호)
+user_id
+user_pw
+user_name
+user_mail
+user_hp
+user_addr
+user_gender
+user_birth
+user_add_input
+user_service
+user_gaib_date

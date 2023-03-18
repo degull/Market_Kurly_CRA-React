@@ -99,7 +99,7 @@
                            &.on strong {
                               display: block;
                            }
-                           p {
+                           h5 {
                               font-size: 12px;
                               color: #666;
                               line-height: 18px;
@@ -311,10 +311,10 @@
                                  height: 24px;
                                  appearance: none;
                                  margin: 0 10px 0 0;
-                                 background: url(../img/check_none.svg) no-repeat 50% 50% ;
+                                 background: url(../img/signup/checkbox_none.svg) no-repeat 50% 50% ;
                                  border-radius: 50%;
                                  &:checked {
-                                    background: url(../img/check_ok.svg) no-repeat 50% 50%;
+                                    background: url(../img/signup/checkbox.svg) no-repeat 50% 50%;
                                  }
                               }
                            }
