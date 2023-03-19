@@ -1,6 +1,8 @@
 import React from 'react';
+import axios from 'axios';
 
 export default function SignUpComponent( {회원가입, setCountPlay, setId, seconds, minutes, } ){
+
 
 /*    React.useEffect(()=>{
       console.log('상위컴포넌트 seconds : ',seconds);
@@ -73,7 +75,7 @@ export default function SignUpComponent( {회원가입, setCountPlay, setId, sec
    }
 
 
-   // [1]-1 아이디 중복확인
+   // [1]-1 아이디 중복확인 => 백엔드 DB 서버에서 데이터 가져오기
    const onClickIdOkBtn=(e)=>{
       e.preventDefault(e);
       const regExp1 = /[`~!@#$%^&*()_\-+=|\\[]{}'";:\/?.>,<]/g; //특수문자
@@ -110,12 +112,90 @@ export default function SignUpComponent( {회원가입, setCountPlay, setId, sec
       else {                                     
          isIdMsg = '';
          isId = true;
-         아이디중복확인 = true;
+         
+
+         // 서버와 접속하기위해서 비동기전송방식 AXIOS API를 사용한다.
+         // AXIOS API 패키지 설치하기
+         // npm install axios
+         // 상단에 import axiois from axios
+         //axios().then(성공sucess).catch(실패error);
+         // ajax({}).success(function(){}).error(function(){});  //ajax
+         // axios().then(function(){}).catch(function(){});
+
+         //HTTP 통신 실패 오류 분석
+         ///////////////////////////
+
+         // Access to XMLHttpRequest at
+         // 닷홈 웹호스팅 서버 조회 SQL문 주소
+         // => 'http://skysh0929.dothome.co.kr/kurly_CRA/select.php'
+
+         // 현재 리액트 조회하는 서버주소 from origin 
+         // =>   'http://localhost:3003' 
+
+         // CORS(Cross Origin Resource Sharing) 웹 브라우저에서 차단 에러 접속 에러 => 서버 주소가 서로 다르기 때문에 웹 호스팅 서버에 스크립트 언어 PHP 헤더에 권한을 설정하고 다시 접속해라.
+         // has been blocked by CORS policy: No 
+         // => 'Access-Control-Allow-Origin' 
+         // header is present on the requested resource.
+
+
+         axios({
+            url:'http://skysh0929.dothome.co.kr/kurly_CRA/select.php',
+            method:'GET'
+         })
+         .then((res)=>{
+            //console.log(res);
+            //console.log(res.data);
+            try{
+
+               //반복문
+               //const result = res.data.map((item, idx)=>{
+               //   if ( item.아이디 === state.아이디 ){
+               //      return '중복아이디';
+               //   }
+               //});
+
+               // 한줄코딩은 화살표만 처리
+               // 배열에 true와 false가 저장된다.
+               const result = res.data.map((item, idx)=>item.아이디 === state.아이디);
+               
+               console.log(result);
+
+
+               if ( result.includes(true) ){ //true이먄 중복
+                  setState({
+                     ...state,
+                     아이디중복확인 : false,
+                     isModal : true,
+                     modalMsg : "사용 불가능한 아이디 입니다"
+                  })
+
+               }
+               else {
+                  setState({
+                     ...state,
+                     아이디중복확인 : true,
+                     isModal : true,
+                     modalMsg : "사용 가능한 아이디 입니다"
+                  })
+               }
+
+               
+            }
+            catch(err){
+               console.log(`axios 데이터 가져오기 실패 ${err}`);
+            }
+            
+         })
+         .catch((err)=>{
+            console.log(`axios 실패 ${err}`);
+         });
+
 
          // 데이터베이스 연동 아이디 중복확인
+
+
          // 중복된 아이디가 없을 때 아래 메시지가 나타난다
-         isModal = true;
-         modalMsg = "사용가능한 아이디 입니다";
+
 
       }
 
