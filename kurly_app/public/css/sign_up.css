@@ -332,7 +332,8 @@
 #wrap #mainSignUp .container .content form ul > li div em i {
   color: #ee6a7b;
 }
-#wrap #mainSignUp .container .content form ul > li div input[type=text] {
+#wrap #mainSignUp .container .content form ul > li div > input[type=password],
+#wrap #mainSignUp .container .content form ul > li div > input[type=text] {
   position: relative;
   width: 100%;
   height: 45px;
@@ -342,10 +343,11 @@
   border-radius: 4px;
   padding: 0 15px;
 }
-#wrap #mainSignUp .container .content form ul > li div input[type=text]::-moz-placeholder {
+#wrap #mainSignUp .container .content form ul > li div > input[type=password]::-moz-placeholder, #wrap #mainSignUp .container .content form ul > li div > input[type=text]::-moz-placeholder {
   color: #aaa;
 }
-#wrap #mainSignUp .container .content form ul > li div input[type=text]::placeholder {
+#wrap #mainSignUp .container .content form ul > li div > input[type=password]::placeholder,
+#wrap #mainSignUp .container .content form ul > li div > input[type=text]::placeholder {
   color: #aaa;
 }
 #wrap #mainSignUp .container .content form ul > li div button {

@@ -355,6 +355,7 @@ export default function SignUpComponent( {회원가입, setCountPlay, setId, sec
          e.preventDefault();
          let isModal = '';
          let modalMsg = '';
+         let 이메일중복확인 = false;
 
          const regExp1 = /^[A-Za-z0-9`~!#$%^&*_\-+=|{}'/?]+[.]?[A-Za-z0-9`~!#$%^&*_\-+=|{}'/?]*@[A-Za-z0-9~\-_.]+\.[A-Za-z]{2,3}$/g;  // 이메일
          const regExp2 = /\s/g; 
@@ -378,15 +379,18 @@ export default function SignUpComponent( {회원가입, setCountPlay, setId, sec
                      if( result.includes(true) ){
                         isModal = true;
                         modalMsg = '사용 불가능한 이메일입니다.'
+                        이메일중복확인 = false;
                      }
                      else {
                         isModal = true;
                         modalMsg = '사용 가능한 이메일입니다.';
+                        이메일중복확인 = true;
                      }
                      setState ({
                         ...state,
                         isModal:isModal,
-                        modalMsg : modalMsg
+                        modalMsg : modalMsg,
+                        이메일중복확인 : 이메일중복확인
                      })
                   }
                   else {
@@ -765,7 +769,7 @@ export default function SignUpComponent( {회원가입, setCountPlay, setId, sec
                   isBirthMsg:'태어난 월을 정확하게 입력해주세요.'
                })
             }
-            else if ( Number(state.생월) >= 1 && Number(state.생월) <= 12 ){
+            else if ( Number(state.생월) < 1 || Number(state.생월) > 12 ){
                setState({
                   ...state,
                   isBirth : true,
@@ -781,7 +785,7 @@ export default function SignUpComponent( {회원가입, setCountPlay, setId, sec
                      isBirthMsg : '태어난 일을 정확하게 입력해주세요.'
                   })
                }
-               else if ( Number(state.생일) >=1 && Number(state.생일) <= 31 ){
+               else if ( Number(state.생일) < 1 || Number(state.생일) > 31 ){
                   setState({
                      ...state,
                      isBirth : true,
@@ -994,32 +998,168 @@ export default function SignUpComponent( {회원가입, setCountPlay, setId, sec
 }
 
 
-   // [11]. 폼데이터 서버에 전송하기 => insert.php => SQL =>데이터베이스에 저장
+   // [11]-1. 가입하기 버튼 클릭 이벤트 => 유효성 검사
+   // 1) 아이디 입력확인
+   // 2) 아이디 중복확인 검증 isIdOk = true
+   // 3) 비밀번호 입력확인
+   // 4) 비밀번호1과 비밀번호2를 비교해 같아면 isPwOk = true
+   // 5) 이름 입력확인
+   // 6) 이메일 입력확인
+   // 7) 이메일 중복확인 검증 isEmailOk = true
+   // 8) 휴대폰 입력확인
+   // 9) 휴대폰 인증번호 검증 isHpOk = true
+   // 10) 주소1, 주소2 검증
+
+   // 11) 성별 - 선택사항
+   // 12) 생년월일 - 선택사항
+   // 13) 추가입력사항 - 선택사항
+
+   // 14) 이용약관동의 필수사항 3개 체크 확인
+
+   // [11]-2. 폼데이터 서버에 전송하기 => insert.php => SQL =>데이터베이스에 저장
    // 1. 가입하기 버튼 클릭 이벤트 => 폼 전송(onSubmitEvent())
    // 2. 폼데이터 객체 생성 newFormData
    // 3. 폼데이터 객체에 폼 요소 추가하기(append)
    // 4. axios() 전송 => 회원가입 요청(Request)
    // 5. 응답(Response)
    const onSubmitGaib=(e)=>{
-      alert('폼전송');
-      //e.preventDefault();
-//
-      //let newFormData = new FormData();
-      //newFormData.append('서버에 보낼 속성 이름', '상태관리자변수이름' );
+      e.preventDefault();
+      let isModal = false;
+      let modalMsg = '';
 
-      //const regExpHp = /^([0-9]{3})([0-9]{3,4})([0-9]{4})$/g;
-      //newFormData.append('user_id',          state.아이디);
-      //newFormData.append('user_pw',          state.비밀번호);
-      //newFormData.append('user_name',        state.이름);
-      //newFormData.append('user_mail',        state.이메일);
-      //newFormData.append('user_phone',       state.휴대폰.replace(regExpHp, `$1-$2-$3`));
-      //newFormData.append('user_addr',        `${state.주소1} ${state.주소2}`);
-      //newFormData.append('user_gender',      state.성별);
-      //newFormData.append('user_bitrh',       `${state.생년}-${state.생월}-${state.생일}`);
-      //newFormData.append('user_add_input',   `${state.추가입력사항}-${state.추천인아이디}-${state.참여이벤트명}`);
-      //newFormData.append('user_service',      state.이용약관동의);
-      //newFormData.append('user_gaib_date',   `${new Date().getFullYear()}-${new Date().getMonth()+1}-${new Date().getDate()}`);
 
+      // 이용약관동의 필수항목 3개
+      // map함수 이용해 배열에 들어있는 데이터 검색있다면 true
+      // includes(true) 3개이면 통과
+      
+      // 카운트
+      let sum = 0;
+      const result = state.이용약관동의.map((item)=>item.includes('필수') ? 1 : 0 );
+
+      result.map((item)=>{
+         sum+=item;
+      });
+
+
+      // 1) 아이디 입력확인
+      if ( state.아이디 === '' ){
+         isModal = true;
+         modalMsg = '아이디를 입력해주세요.';
+      }
+
+      // 2) 아이디 중복확인 검증 isIdOk = true
+      else if( state.아이디중복확인 === false ){
+         isModal = true;
+         modalMsg = '아이디가 중복되었습니다.';
+      }
+
+      // 3) 비밀번호 입력확인
+      else if ( state.비밀번호 === '' ){
+         isModal = true;
+         modalMsg = '비밀번호를 입력해주세요';
+      }
+
+      // 4) 비밀번호1과 비밀번호2를 비교해 같아면 isPwOk = true
+      else if ( state.비밀번호확인 === '' ){
+         isModal = true;
+         modalMsg = '비밀번호를 한번 더 입력해주세요';
+      }
+
+       // 5) 이름 입력확인
+      else if ( state.이름 === '' ){
+         isModal = true;
+         modalMsg = '이름을 입력해주세요';
+      }
+
+      // 6) 이메일 입력확인
+      else if ( state.이메일 === '' ){
+         isModal = true;
+         modalMsg = '이메일을 입력해주세요.';
+      }
+
+       // 7) 이메일 중복확인 검증 isEmailOk = true
+      else if ( state.이메일중복확인 === false ){
+         isModal = true;
+         modalMsg = '이메일이 중복되었습니다.';
+      }
+
+      // 8) 휴대폰 입력확인
+      else if ( state.휴대폰 === '' ){
+         isModal = true;
+         modalMsg = '휴대폰 번호를 입력해주세요.';
+      }
+
+      // 9) 휴대폰 인증번호 검증 isHpOk = true
+      else if ( state.휴대폰인증번호 === false ){
+         isModal = true;
+         modalMsg = '휴대폰 인증번호를 확인해주세요.';
+      }
+      
+      // 10) 주소1, 주소2 검증
+      else if ( state.주소1 === '' ){
+         isModal = true;
+         modalMsg = '주소를 입력해주세요.';
+      }
+      else if ( state.주소2 === '' ){
+         isModal = true;
+         modalMsg = '나머지 주소를 입력해주세요.';
+      }
+
+       // 14) 이용약관동의 필수사항 3개 체크 확인
+       else if ( sum < 3 ){
+         isModal = true;
+         modalMsg = '이용약관동의 필수항목(3개)을 체크해주세요.';
+      }
+      
+      else {
+
+         // 유효성 검사 통과된 경우 전송
+         // AXIOS 비동기식 전송
+         const regExpHp = /^([0-9]{3})([0-9]{3,4})([0-9]{4})$/g;
+
+         let newFormData = new FormData();
+         newFormData.append('user_id',          state.아이디);
+         newFormData.append('user_pw',          state.비밀번호);
+         newFormData.append('user_name',        state.이름);
+         newFormData.append('user_mail',        state.이메일);
+         newFormData.append('user_phone',       state.휴대폰.replace(regExpHp, `$1-$2-$3`));
+         newFormData.append('user_addr',        `${state.주소1} ${state.주소2}`);
+         newFormData.append('user_gender',      state.성별);
+         newFormData.append('user_bitrh',       `${state.생년}-${state.생월}-${state.생일}`);
+         newFormData.append('user_add_input',   `${state.추가입력사항} : ${state.추천인아이디}${state.참여이벤트명}`);
+         newFormData.append('user_service',      state.이용약관동의);
+         newFormData.append('user_gaib_date',   `${new Date().getFullYear()}-${new Date().getMonth()+1}-${new Date().getDate()}`);
+
+         // AXIOS 전송
+         axios({
+            url:'http://skysh0929.dothome.co.kr/kurly_CRA/member_insert.php',
+            method:'POST',
+            data : newFormData
+         })
+         .then((res)=>{
+            if(res.status === 200){
+               setState({  //유효성 검증 메세지 컨펌 모달창
+                  ...state,
+                  isModal : true,
+                  modalMsg : '마켓컬리 회원가입을 축하합니다!',
+               })
+            }   
+         })
+         .catch((err)=>{
+            console.log('AXIOS 전송 실패');
+         });
+         
+
+      // 유효성 검증 메세지 컨펌 모달창
+      setState({
+         ...state,
+         isModal : isModal,
+         modalMsg : modalMsg
+      })
+   }
+
+
+      
 
       // axios 전송
    //   axios({
@@ -1071,7 +1211,8 @@ export default function SignUpComponent( {회원가입, setCountPlay, setId, sec
                   <span><i>*</i>필수입력사항</span>
             </div>
             <div className="content">
-               <form name="signup_form" id="signUpForm" method= "post" action="./member_insert_test_form.php">
+               {/*  <form name="signup_form" id="signUpForm" method= "post" action="http://skysh0929.dothome.co.kr/kurly_CRA/member_insert.php">*/}
+               <form>
                   <ul>
                      <li>  {/* <!-- ID --> */}
                         <div>
@@ -1097,7 +1238,7 @@ export default function SignUpComponent( {회원가입, setCountPlay, setId, sec
                         <div>
                            <em>비밀번호<i>*</i></em>
                            <input 
-                           type="text" 
+                           type="password" 
                            name="user_pass" 
                            id="userPass" 
                            maxLength={16} 
@@ -1115,7 +1256,7 @@ export default function SignUpComponent( {회원가입, setCountPlay, setId, sec
                         <div>
                            <em>비밀번호확인<i>*</i></em>
                            <input 
-                           type="text" 
+                           type="password" 
                            name="user_pass2" 
                            id="userPass2" 
                            placeholder="비밀번호를 한번 더 입력해주세요"

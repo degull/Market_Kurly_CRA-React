@@ -1,4 +1,7 @@
 <?
+
+      include_once('./head.php');
+
       header('Access-Control-Allow-Origin: *');
       header('Access-Control-Allow-Headers: *');
    
@@ -10,7 +13,7 @@
    
       // 데이터베이스 접속(connect)
       $conn = mysqli_connect($db_server, $db_user_name, $db_user_pw, $db_name);
-      mysqli_set_char`set($conn, 'utf8');
+      mysqli_set_charset($conn, 'utf8');
 
       // http://skysh0929.dothome.co.kr/kurly_CRA/member_insert.php
 
@@ -29,16 +32,15 @@
   
    $sql = "INSERT INTO market_kurly_table(user_id,user_pw,user_name,user_mail,user_hp,user_addr,user_gender,user_birth,user_add_input,user_service,user_gaib_date) 
       VALUES
-      
       ('$user_id','$user_pw', '$user_name', '$user_mail', '$user_phone', '$user_addr','$user_gender', '$user_bitrh','$user_add_input ', '$user_service', '$user_gaib_date' )";
       $result = mysqli_query($conn, $sql);
 
 
       if ($result){
-         echo ("데이터 삽입 성공");
+         echo "데이터 삽입 성공!";
       }
       else {
-         echo ("데이터 삽입 실패");
+         echo "데이터 삽입 실패!";
       }
 
 ?>
