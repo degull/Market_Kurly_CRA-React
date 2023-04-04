@@ -1,7 +1,7 @@
 <?
 
    header('Access-Control-Allow-Origin: *');
-   header('Access-Control-Allow-Header: *');
+   header('Access-Control-Allow-Headers: *');
 
    // 데이터베이스 접속 권한 
    $db_server      = 'localhost';

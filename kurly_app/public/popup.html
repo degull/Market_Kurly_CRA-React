@@ -230,6 +230,8 @@
                      //opener.sessionStorage.setItem('컬리주소', `${addr1.value} ${addr2.value}`);
                      
                      opener.sessionStorage.setItem(key, JSON.stringify(obj));
+                     opener.document.querySelector('#addr1').focus();
+
                      
                      //팝업창 닫기
                      window.close();

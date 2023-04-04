@@ -1,6 +1,7 @@
 <?
 
 //skysh0929.dothome.co.kr/kurly_CRA/select.php
+//skysh0929.dothome.co.kr/myadmin
 
 
 

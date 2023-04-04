@@ -353,8 +353,6 @@ export default function SignUpComponent( {회원가입, setCountPlay, setId, sec
       // [4]-1 이메일 중복 확인 버튼 클릭 이벤트
       const onClickEmailOk=(e)=>{
          e.preventDefault();
-         let isEmail = false;
-         let isEmailMsg = '';
          let isModal = '';
          let modalMsg = '';
 
@@ -363,30 +361,52 @@ export default function SignUpComponent( {회원가입, setCountPlay, setId, sec
 
          if(state.이메일!=='') {   
             if (regExp1.test(state.이메일) === false || regExp2.test(state.이메일) === true) {
-               isEmailMsg = '이메일 형식으로 입력해주세요';
-               isEmail = false;
                isModal = true;
                modalMsg = "이메일 형식으로 입력해주세요."
    
             }
             else {
-               isEmailMsg = '';
-               isEmail = true;
+               // 이메일 중복검사
+
+               axios({
+                  url:'http://skysh0929.dothome.co.kr/kurly_CRA/select.php',
+                  method:'GET'
+               })
+               .then((res)=>{
+                  if (res.status===200){  // axios 데이터 가져오기 성공
+                     const result = res.data.map((item)=>item.이메일===state.이메일);
+                     if( result.includes(true) ){
+                        isModal = true;
+                        modalMsg = '사용 불가능한 이메일입니다.'
+                     }
+                     else {
+                        isModal = true;
+                        modalMsg = '사용 가능한 이메일입니다.';
+                     }
+                     setState ({
+                        ...state,
+                        isModal:isModal,
+                        modalMsg : modalMsg
+                     })
+                  }
+                  else {
+                     console.log('이메일 데이터 가져오기 실패');
+                  }
+               })
+               .catch((err)=>{
+                 console.log('axois 실패');
+               });
                // 데이터베이스 이메일 중복확인
 
-               isModal = true;
-               modalMsg = "사용가능한 이메일 입니다.";
             }
          }
          else {   // 이메일이 공백이면
-            isEmailMsg ='이메일을 입력해주세요';
+            isModal = true;
+            modalMsg = '이메일 형식으로 입력해주세요.';
          }
    
          setState({
             ...state,
-            isEmail:isEmail,
-            isEmailMsg:isEmailMsg,
-            이메일:state.이메일,
             isModal : isModal,
             modalMsg : modalMsg
          })
@@ -556,11 +576,17 @@ export default function SignUpComponent( {회원가입, setCountPlay, setId, sec
 
       // [6]. 주소입력상자 온체인지 이벤트
       const onChangeAddr1=(e)=>{
-         setState (e.target.value);
+         setState({
+            ...state,
+            주소1 : e.target.value
+      }); 
       }
 
       const onChangeAddr2=(e)=>{
-         setState (e.target.value);
+         setState({
+            ...state,
+            주소2 : e.target.value
+      }); 
       }
 
 
@@ -822,6 +848,46 @@ export default function SignUpComponent( {회원가입, setCountPlay, setId, sec
       })
    }
 
+   //[9]-3. 추천인 아이디 확인
+   const onClickChooCheonId=(e)=>{
+      e.preventDefault();
+      let isModal = false;
+      let modalMsg = '';
+
+         axios({
+            url:'http://skysh0929.dothome.co.kr/kurly_CRA/select.php',
+            method:'POST'
+         })
+         .then((res)=>{
+            if (res.status===200){
+               const result = res.data.map((item)=>item.아이디===state.추천인아이디);
+
+               if (state.추천인아이디===''){
+                  isModal = true;
+                  modalMsg='아이디를 입력해주세요';
+               }
+               else if (result.includes(true)){
+                  isModal = true;
+                  modalMsg = '존재하는 아이디 입니다. 친구초대 이벤트에 참여 가능해요';
+               }
+               else {
+                  isModal = true;
+                  modalMsg = '존재하지 않는 아이디 입니다.';
+               }
+
+               // 상태관리
+               setState({
+                  ...state,
+                  isModal : isModal,
+                  modalMsg : modalMsg
+               });
+            }
+         })
+         .catch((err)=>{
+            console.log('axios 실패!', err);
+         })
+   }
+
 
 
    // [10]. 이용약관동의 : 체크박스 (모두체크)
@@ -927,6 +993,49 @@ export default function SignUpComponent( {회원가입, setCountPlay, setId, sec
    }
 }
 
+
+   // [11]. 폼데이터 서버에 전송하기 => insert.php => SQL =>데이터베이스에 저장
+   // 1. 가입하기 버튼 클릭 이벤트 => 폼 전송(onSubmitEvent())
+   // 2. 폼데이터 객체 생성 newFormData
+   // 3. 폼데이터 객체에 폼 요소 추가하기(append)
+   // 4. axios() 전송 => 회원가입 요청(Request)
+   // 5. 응답(Response)
+   const onSubmitGaib=(e)=>{
+      alert('폼전송');
+      //e.preventDefault();
+//
+      //let newFormData = new FormData();
+      //newFormData.append('서버에 보낼 속성 이름', '상태관리자변수이름' );
+
+      //const regExpHp = /^([0-9]{3})([0-9]{3,4})([0-9]{4})$/g;
+      //newFormData.append('user_id',          state.아이디);
+      //newFormData.append('user_pw',          state.비밀번호);
+      //newFormData.append('user_name',        state.이름);
+      //newFormData.append('user_mail',        state.이메일);
+      //newFormData.append('user_phone',       state.휴대폰.replace(regExpHp, `$1-$2-$3`));
+      //newFormData.append('user_addr',        `${state.주소1} ${state.주소2}`);
+      //newFormData.append('user_gender',      state.성별);
+      //newFormData.append('user_bitrh',       `${state.생년}-${state.생월}-${state.생일}`);
+      //newFormData.append('user_add_input',   `${state.추가입력사항}-${state.추천인아이디}-${state.참여이벤트명}`);
+      //newFormData.append('user_service',      state.이용약관동의);
+      //newFormData.append('user_gaib_date',   `${new Date().getFullYear()}-${new Date().getMonth()+1}-${new Date().getDate()}`);
+
+
+      // axios 전송
+   //   axios({
+   //      url:'http://skysh0929.dothome.co.kr/kurly_CRA/member_insert.php',
+   //      method:'POST',
+   //      data:newFormData
+   //   })
+   //   .then((res)=>{
+   //      console.log('Axios 전송 성공');
+   //      console.log(res.data);
+   //   })
+   //   .catch((err)=>{
+   //      console.log('Axios 전송 실패');
+   //   });
+   }
+
    // [11]. 유효성검사 서버에 전송
 
    // [12]. 데이터베이스 서버 : 회원가입 테이블 생성
@@ -962,7 +1071,7 @@ export default function SignUpComponent( {회원가입, setCountPlay, setId, sec
                   <span><i>*</i>필수입력사항</span>
             </div>
             <div className="content">
-               <form name="signup_form" id="signUpForm" method= "post" action="./sign_up.php">
+               <form name="signup_form" id="signUpForm" method= "post" action="./member_insert_test_form.php">
                   <ul>
                      <li>  {/* <!-- ID --> */}
                         <div>
@@ -1095,7 +1204,8 @@ export default function SignUpComponent( {회원가입, setCountPlay, setId, sec
                            name="addr1" 
                            id="addr1" 
                            placeholder="주소검색 API"
-                           onChange={onChangeAddr1}
+                           onFocus={onChangeAddr1}
+                           onChange={onChangeAddr1} 
                            value={state.주소1}
                            />
                            <button 
@@ -1270,7 +1380,7 @@ export default function SignUpComponent( {회원가입, setCountPlay, setId, sec
                            />
 
                            {  /* 아이디 확인 버튼은 state.isAddon === false이면 보이고 그렇지 않으면 숨김 */
-                              state.isAdd === false ? <button className="address-search-btn">아이디 확인</button>:``
+                              state.isAdd === false ? <button onClick={onClickChooCheonId} className="address-search-btn">아이디 확인</button>:``
 
                            }
                         </div>
@@ -1349,7 +1459,7 @@ export default function SignUpComponent( {회원가입, setCountPlay, setId, sec
 
                      <li className="button-box">
                         <div>
-                           <button type="submit" className="submit-btn">가입하기</button>
+                           <button onClick={onSubmitGaib} type="submit" className="submit-btn">가입하기</button>
                         </div>
                      </li>
 
@@ -1367,13 +1477,13 @@ export default function SignUpComponent( {회원가입, setCountPlay, setId, sec
 
          state.isModal && (
             <div id="formEventModal">
-               <div class="wrap">
-                  <div class="container">
-                     <div class="message-box">
-                        <p class="msg">{state.modalMsg}</p>
+               <div className="wrap">
+                  <div className="container">
+                     <div className="message-box">
+                        <p className="msg">{state.modalMsg}</p>
                      </div>
-                     <div class="button-box">
-                        <button onClick={onClickModalClose} class="msg-modal-close-btn">확인</button>
+                     <div className="button-box">
+                        <button onClick={onClickModalClose} className="msg-modal-close-btn">확인</button>
                      </div>
                   </div>
                </div>
